@@ -236,6 +236,9 @@ PRODUCT_COPY_FILES += \
 
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
+PRODUCT_PACKAGES += \
+    libboringssl-compat
+
 # Camera
 PRODUCT_PACKAGES += \
 	Snap \
