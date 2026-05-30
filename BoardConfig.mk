@@ -146,6 +146,7 @@ TARGET_LD_SHIM_LIBS := \
 	/system/lib/libaudio_param_parser.so|libshim_gps.so \
 	/system/lib/audio.primary.mt6737t.so|libshim_audio.so \
 	/system/bin/thermal|libshim_ifc.so \
+	/system/lib/libaudio-ril.so|libshim_audio.so \
 	/system/bin/libdpframework.so|libshim_xlog.so
 
 LD_PRELOADS += mtk_symbols.so

@@ -42,4 +42,11 @@ extern "C" {
     int _ZN7android11AudioSystem15GetAudioCommandEiPi(int var1) {
         return 0;
     }
+
+    void SetSoundClockMode(int mode) {
+    }
+
+    int SetAudioMode(int mode) {
+        return 0;
+    }
 }
