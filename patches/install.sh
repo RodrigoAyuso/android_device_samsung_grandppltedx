@@ -26,5 +26,28 @@ for dir in $dirs ; do
 done
 
 # -----------------------------------
+# MTK Audio Workaround (Bypass API 3.0)
+# -----------------------------------
+echo -e "\n${RED}Applying MTK Audio Workaround to Device.cpp...${NC}"
+
+DEVICE_CPP="$rootdirectory/hardware/interfaces/audio/2.0/default/Device.cpp"
+
+if [ -f "$DEVICE_CPP" ]; then
+    if ! grep -q "AUDIO_DEVICE_API_VERSION_2_0" "$DEVICE_CPP"; then
+        sed -i '/: mDevice(device) {/a \
+    \n    // MTK Android 6.0 Workaround: Downgrade HAL version to 2.0 \
+    // to bypass broken createAudioPatch ABI. \
+    if (mDevice->common.version >= AUDIO_DEVICE_API_VERSION_3_0) { \
+        ALOGI("Forcing audio HAL version to 2.0 for MTK workaround"); \
+        mDevice->common.version = AUDIO_DEVICE_API_VERSION_2_0; \
+    }' "$DEVICE_CPP"
+        echo "Audio MTK patch applied successfully!"
+    else
+        echo "Audio MTK patch already applied, skipping."
+    fi
+else
+    echo -e "Warning: Device.cpp not found at $DEVICE_CPP\nCould not apply MTK Audio patch."
+fi
+# -----------------------------------
 echo -e "Done !\n"
 cd $rootdirectory
