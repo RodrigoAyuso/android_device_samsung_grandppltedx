@@ -1,0 +1,39 @@
+Subject: [PATCH] audio: Force MTK HAL to API version 2.0
+
+MediaTek's Android 6.0 audio HAL claims to support API version 3.0,
+but it has an inverted ABI structure for audio_port_config_device_ext
+and audio_port_config_mix_ext compared to standard AOSP.
+
+This mismatch causes the AudioPolicyManager to pass incorrect values
+(like device.type 0) to createAudioPatch, resulting in a -22 (Invalid 
+argument) failure and completely breaking wired headset routing.
+
+By forcing the HAL version down to 2.0, we bypass createAudioPatch 
+and force the APM to use the legacy setParameters("connect=4") method, 
+which works perfectly.
+
+Change-Id: I1234567890abcdef1234567890abcdef12345678
+---
+ audio/2.0/default/Device.cpp | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/audio/2.0/default/Device.cpp b/audio/2.0/default/Device.cpp
+index abcdef1..1234567 100644
+--- a/audio/2.0/default/Device.cpp
++++ b/audio/2.0/default/Device.cpp
+@@ -34,7 +34,14 @@ namespace implementation {
+ 
+ Device::Device(audio_hw_device_t* device)
+         : mDevice(device) {
++
++    // MTK Android 6.0 Workaround: Downgrade HAL version to 2.0 
++    // to bypass broken createAudioPatch ABI.
++    if (mDevice->common.version >= AUDIO_DEVICE_API_VERSION_3_0) {
++        ALOGI("Forcing audio HAL version to 2.0 for MTK workaround");
++        mDevice->common.version = AUDIO_DEVICE_API_VERSION_2_0;
++    }
+ }
+ 
+ Device::~Device() {
+-- 
+2.17.1
