@@ -135,3 +135,9 @@
 /dev/ionfd2phys           0660   system     radio
 /dev/tuihw                0660   system     system
 /dev/tzirs                0660   system     system
+
+# Permissions for MTK Video Encoder and Multimedia Bus
+/dev/Vcodec               0666   mediacodec   camera
+/dev/VcodecSys            0666   mediacodec   camera
+/dev/Vcodec_V2            0666   mediacodec   camera
+/dev/MTK_SMI              0666   mediacodec   camera
