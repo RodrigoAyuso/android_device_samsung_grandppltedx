@@ -723,7 +723,7 @@ on boot
 
 # HMP CPU hotplug strategy
     chown radio system /proc/hps/num_base_perf_serv
-    chmod 0664 /proc/hps/num_base_perf_serv
+    chmod 0666 /proc/hps/num_base_perf_serv
     chown system system /proc/hps/num_limit_power_serv
     chmod 0660 /proc/hps/num_limit_power_serv
     chown system system /proc/hps/num_limit_ultra_power_saving
@@ -745,9 +745,9 @@ on boot
 
 # CPU freq
     chown system system /proc/cpufreq/cpufreq_limited_by_hevc
-    chmod 0660 /proc/cpufreq/cpufreq_limited_by_hevc
+    chmod 0666 /proc/cpufreq/cpufreq_limited_by_hevc
     chown system system /proc/cpufreq/cpufreq_limited_max_freq_by_user
-    chmod 0660 /proc/cpufreq/cpufreq_limited_max_freq_by_user
+    chmod 0666 /proc/cpufreq/cpufreq_limited_max_freq_by_user
 
 # BW monitor
     chown system system /proc/fliper
