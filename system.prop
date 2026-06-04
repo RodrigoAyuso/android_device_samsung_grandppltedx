@@ -50,14 +50,6 @@ ro.hwui.disable_scissor_opt=true
 debug.hwui.renderer=opengl
 
 dalvik.vm.mtk-stack-trace-file=/data/anr/mtk_traces.txt
-
-# from wileyfox_porridge
-dalvik.vm.heapstartsize=8m
-dalvik.vm.heapgrowthlimit=192m
-dalvik.vm.heapsize=512m
-dalvik.vm.heaptargetutilization=0.75
-dalvik.vm.heapminfree=512k
-dalvik.vm.heapmaxfree=8m
     
 ## Block
 ro.frp.pst=/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/PERSISTENT
