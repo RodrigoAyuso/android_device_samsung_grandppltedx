@@ -42,9 +42,10 @@ PRODUCT_PACKAGES += \
 
 # Graphics
 PRODUCT_PACKAGES += \
+	libGLES_android \
 	libgui_ext \
 	libui_ext \
-	libshim_gui \
+	libgralloc_extra \
 	android.hardware.graphics.allocator@2.0-impl \
 	android.hardware.graphics.mapper@2.0-impl \
 	android.hardware.graphics.composer@2.1-impl
