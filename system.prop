@@ -50,6 +50,19 @@ ro.hwui.disable_scissor_opt=true
 debug.hwui.renderer=opengl
 
 dalvik.vm.mtk-stack-trace-file=/data/anr/mtk_traces.txt
+
+dalvik.vm.dex2oat-Xms=64m
+dalvik.vm.dex2oat-Xmx=256m
+dalvik.vm.boot-dex2oat-threads=4
+dalvik.vm.dex2oat-threads=2
+ro.sys.fw.dex2oat_thread_count=2
+dalvik.vm.dex2oat-filter=quicken
+dalvik.vm.image-dex2oat-filter=quicken
+pm.dexopt.first-boot=quicken
+pm.dexopt.boot=verify
+pm.dexopt.install=quicken
+pm.dexopt.bg-dexopt=speed-profile
+pm.dexopt.shared=speed
     
 ## Block
 ro.frp.pst=/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/PERSISTENT

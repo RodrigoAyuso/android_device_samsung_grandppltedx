@@ -232,7 +232,6 @@ DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/configs/manifest.xml
 # Misc
 EXTENDED_FONT_FOOTPRINT := true
 
-#-- Disable ODEX
-#-- not buildable on Jammy
-WITH_DEXPREOPT := false
+# ODEX
+WITH_DEXPREOPT := True
 DONT_DEXPREOPT_PREBUILTS := true
