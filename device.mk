@@ -181,6 +181,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.kernel.android.checkjni=0
 
+# FM
+MTK_FM_SUPPORT := true
+
+PRODUCT_PACKAGES += \
+	libfmjni \
+	FMRadio \
+	libfmcust
+
 # shim / symbols
 PRODUCT_PACKAGES += \
 	libboringssl-compat \
