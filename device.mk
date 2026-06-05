@@ -239,6 +239,7 @@ PRODUCT_COPY_FILES += \
 
 # GPS
 PRODUCT_PACKAGES += \
+        gps.mt6737t \
 	wifi2agps \
 	libepos \
 	libcurl
@@ -251,6 +252,11 @@ $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
 PRODUCT_PACKAGES += \
     libboringssl-compat
+
+# GPS / GNSS HAL
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.0-impl \
+    android.hardware.gnss@1.0-service
 
 # Camera
 PRODUCT_PACKAGES += \
