@@ -231,6 +231,7 @@ DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/configs/manifest.xml
 
 # Misc
 EXTENDED_FONT_FOOTPRINT := true
+TARGET_EXFAT_DRIVER := exfat
 
 # ODEX
 WITH_DEXPREOPT := true
