@@ -169,6 +169,8 @@ PRODUCT_COPY_FILES += \
 SIM_COUNT := 2
 
 PRODUCT_PACKAGES += \
+	android.hardware.radio@1.0 \
+        android.hardware.radio.deprecated@1.0 \
 	libsecril-client \
 	libsecril-shim \
 	libxml2 \
