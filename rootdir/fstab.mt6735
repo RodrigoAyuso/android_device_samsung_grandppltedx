@@ -35,3 +35,5 @@
 /devices/mtk-msdc.0/11240000.msdc1/mmc_host/mmc*               auto        auto defaults voldmanaged=sdcard1:auto,encryptable=userdata
 
 /devices/platform/mt_usb/musb-hdrc.0.auto/usb*                 auto        auto defaults voldmanaged=usb:auto
+
+/dev/block/zram0                                               none        swap defaults zramsize=536870912,swapprio=32758
