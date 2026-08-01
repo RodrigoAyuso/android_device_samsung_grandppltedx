@@ -40,6 +40,11 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 PRODUCT_PACKAGES += \
 	libion
 
+# DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service
+
 # Graphics
 PRODUCT_PACKAGES += \
 	libGLES_android \
