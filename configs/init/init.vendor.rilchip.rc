@@ -3,16 +3,19 @@
 # IMPORTANT: Do not create world writable files or directories.
 # This is a common source of Android security bugs.
 #
+service ril-daemon /vendor/bin/hw/rild -l ${rild.libpath}
+    class main
+    user radio
+    group radio cache inet misc audio log system readproc wakelock oem_5432 net_admin net_raw
 
 service ril-daemon1 /vendor/bin/hw/rild -c 2 -l ${rild.libpath2}
     class main
     user radio
-    group radio cache inet misc audio sdcard_r sdcard_rw log vpn system readproc wakelock oem_5432
-    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW SYS_ADMIN CHOWN DAC_READ_SEARCH
+    group radio cache inet misc audio log system readproc wakelock oem_5432 net_admin net_raw
 
 # APN HACK
 on post-fs-data
-    # Remove symlinks to avoid issues with migrate after nandroid restores
+# Remove symlinks to avoid issues with migrate after nandroid restores
     # Will be recreated at end of boot
     rmdir /data/data/com.android.providers.telephony/databases
     rmdir /data/data/com.android.providers.telephony/shared_prefs
