@@ -9,7 +9,8 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-	PermissionCache.cpp
+    PermissionCache.cpp \
+    Strdup16to8.cpp
 
 LOCAL_SHARED_LIBRARIES := \
 	libbinder \

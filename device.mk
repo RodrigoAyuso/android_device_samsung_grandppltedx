@@ -9,8 +9,6 @@ DEVICE_PATH := device/samsung/grandppltedx
 VENDOR_PATH := vendor/samsung/grandppltedx
 
 # Properties
--include $(DEVICE_PATH)/vendor_prop.mk
-
 BLOCK_BASED_OTA := true
 
 # Device is a phone
@@ -39,12 +37,21 @@ PRODUCT_PACKAGES += \
 
 # Graphics
 PRODUCT_PACKAGES += \
+        libGLES_android \
 	libgui_ext \
 	libui_ext \
+	libgralloc_extra \
 	android.hardware.graphics.allocator@2.0-impl \
-	android.hardware.graphics.allocator@2.0-service \
-	android.hardware.graphics.mapper@2.0-impl \
-	android.hardware.graphics.composer@2.1-impl
+        android.hardware.graphics.allocator@2.0-service \
+        android.hardware.graphics.mapper@2.0-impl \
+        android.hardware.graphics.composer@2.1-impl \
+        android.hardware.graphics.composer@2.1-service
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.sf.enable_gl_backpressure=1
+
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.surface_flinger.max_frame_buffer_acquired_buffers=3
 
 # Configs
 #-- Audio
@@ -98,7 +105,7 @@ PRODUCT_COPY_FILES += \
 	$(DEVICE_PATH)/configs/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
 	$(DEVICE_PATH)/configs/media/media_codecs_sec_primary.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_sec_primary.xml \
 	$(DEVICE_PATH)/configs/media/media_codecs_sec_secondary.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_sec_secondary.xml \
-	$(DEVICE_PATH)/configs/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles.xml
+	$(DEVICE_PATH)/configs/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
 
 # Legacy OMX
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -130,7 +137,6 @@ PRODUCT_PACKAGES += \
 	wpa_supplicant \
 	wpa_supplicant.conf \
 	lib_driver_cmd_mt66xx \
-	android.hardware.wifi@1.0-service \
 	wificond \
 	wifilogd
 
@@ -141,6 +147,10 @@ PRODUCT_COPY_FILES += \
 	$(DEVICE_PATH)/configs/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf \
 	$(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
 	$(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf
+
+
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.kernel.android.checkjni=0
 
 #-- Carrier
 PRODUCT_COPY_FILES += \
@@ -162,7 +172,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
 	libshim_binder \
 	libshim_bionic \
-	libshim_xlog
+	libshim_xlog \
+	libshim_gui \
+	libshim_region \
+	libshim_ssl \
+	libutilscallstack
 
 # Platform
 PRODUCT_PACKAGES += \
@@ -199,7 +213,8 @@ PRODUCT_COPY_FILES += \
 # GPS
 PRODUCT_PACKAGES += \
 	libepos \
-	libcurl
+	libcurl \
+	libandroid_net
 	
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.location.gps.xml \
@@ -217,8 +232,7 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
 	Snap \
-	android.hardware.camera.provider@2.4-impl \
-	android.hardware.camera.provider@2.4-service
+        android.hardware.camera.provider@2.4-impl-legacy
 
 #-- perm
 PRODUCT_COPY_FILES += \
@@ -239,10 +253,7 @@ PRODUCT_PACKAGES += \
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service \
-    android.hardware.drm@1.1-service.widevine \
-    android.hardware.drm@1.2-service.clearkey \
-    move_widevine_data.sh
+    android.hardware.drm@1.0-service
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -250,13 +261,11 @@ PRODUCT_PACKAGES += \
 
 # Gatekeeper
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl \
-    android.hardware.gatekeeper@1.0-service \
+    android.software.gatekeeper
 
-# Keymaster
+# Keymaster - software fallback for legacy device
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service \
+    android.hardware.keymaster@4.0-service
 
 # Memtrack
 PRODUCT_PACKAGES += android.hardware.memtrack@1.0-impl
@@ -338,3 +347,24 @@ PRODUCT_PACKAGES += \
 
 # Vendor
 $(call inherit-product-if-exists, vendor/samsung/grandppltedx/grandppltedx-vendor.mk)
+
+# Legacy HIDL compatibility
+PRODUCT_PACKAGES += \
+    libhidltransport \
+    libhidltransport.vendor \
+    libhwbinder \
+    libhwbinder.vendor
+
+# Legacy protobuf compatibility for Widevine
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v29/arm/arch-arm-armv7-a-neon/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-lite-v29.so
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lmk.use_psi=false \
+    ro.lmk.use_minfree_levels=true \
+    ro.config.per_app_memcg=false \
+    debug.sf.disable_backpressure=1
+
+# Sensors
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.sensors=mt6735

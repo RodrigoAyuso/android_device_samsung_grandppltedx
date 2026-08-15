@@ -108,8 +108,7 @@ BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_SOURCE	:= kernel/samsung/grandppltedx
 TARGET_KERNEL_CONFIG	:= mt6737t-grandpplte_defconfig
 
-BOARD_KERNEL_CMDLINE	:= bootopt=64S3,32N2,32N2 androidboot.selinux=permissive
-BOARD_KERNEL_CMDLINE	:= androidboot.fstab_name=fstab.mt6735
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,32N2 androidboot.selinux=permissive androidboot.fstab_name=fstab.mt6735
 BOARD_KERNEL_BASE	:= 0x3fffc000
 BOARD_KERNEL_PAGESIZE	:= 2048
 BOARD_RAMDISK_OFFSET	:= 0x04004000
@@ -140,7 +139,13 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/fstab.mt6735
 
 # Move symlinks here
 TARGET_LD_SHIM_LIBS := \
-	/system/lib/liblog.so|/system/vendor/lib/libshim_xlog.so
+    /system/vendor/lib/hw/hwcomposer.mt6735.so|libshim_xlog.so \
+    /system/vendor/lib/egl/libGLES_mali.so|libutilscallstack.so \
+    /system/vendor/lib/hw/gralloc.mt6735.so|libshim_bionic.so \
+    /system/vendor/lib/hw/gralloc.mt6735.so|libutilscallstack.so \
+    /system/vendor/bin/nvram_agent_binder|/system/vendor/lib/libshim_binder.so \
+    /system/vendor/bin/mtk_agpsd|/system/vendor/lib/libshim_ssl.so \
+    /system/vendor/lib/egl/libGLES_mali.so|/system/vendor/lib/libshim_region.so
 
 # Audio
 BOARD_USES_MTK_AUDIO := true
@@ -204,10 +209,8 @@ TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
 TARGET_USES_NON_TREBLE_CAMERA := true
 BOARD_USE_SAMSUNG_CAMERAFORMAT_YUV420SP := true
 
-# Treble
-PRODUCT_FULL_TREBLE_OVERRIDE := true
-BOARD_VNDK_RUNTIME_DISABLE := true
-BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
+# system properties
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # SEAndroid
 SELINUX_IGNORE_NEVERALLOWS := true
@@ -237,5 +240,5 @@ EXTENDED_FONT_FOOTPRINT := true
 
 #-- Disable ODEX
 #-- not buildable on Jammy
-WITH_DEXPREOPT := false
+WITH_DEXPREOPT := true
 DONT_DEXPREOPT_PREBUILTS := true

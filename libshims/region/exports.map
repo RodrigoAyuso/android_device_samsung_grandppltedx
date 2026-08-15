@@ -1,0 +1,13 @@
+LIBSHIM_REGION {
+    global:
+        _ZN7android6Region12subtractSelfERKNS_4RectE;
+        _ZN7android6Region3setEii;
+        _ZN7android6Region5clearEv;
+        _ZN7android6Region6orSelfERKNS_4RectE;
+        _ZN7android6RegionC1Ev;
+        _ZN7android6RegionD1Ev;
+        _ZNK7android6Region8getArrayEPj;
+
+    local:
+        *;
+};

@@ -1,6 +1,11 @@
 cc_library_shared {
     name: "libui_ext",
     vendor: true,
+
+    cflags: [
+        "-DDO_NOT_CHECK_MANUAL_BINDER_INTERFACES",
+    ],
+
     srcs: [
         "GraphicBufferUtil.cpp",
         "FpsCounter.cpp",

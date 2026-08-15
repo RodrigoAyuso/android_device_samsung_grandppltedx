@@ -1,6 +1,11 @@
 cc_library_shared {
     name: "libgui_ext",
     vendor: true,
+
+    cflags: [
+        "-DDO_NOT_CHECK_MANUAL_BINDER_INTERFACES",
+    ],
+
     srcs: [
         "GuiExtClient.cpp",
         "GuiExtClientConsumer.cpp",
@@ -9,6 +14,7 @@ cc_library_shared {
         "GuiExtService.cpp",
         "IGuiExtService.cpp",
     ],
+
     shared_libs: [
         "libbinder",
         "libcutils",
