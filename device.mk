@@ -369,3 +369,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Sensors
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.sensors=mt6735
+
+# App widgets
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.app_widgets.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.software.app_widgets.xml
