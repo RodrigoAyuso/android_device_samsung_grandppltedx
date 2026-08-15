@@ -161,6 +161,8 @@ PRODUCT_COPY_FILES += \
 SIM_COUNT := 2
 
 PRODUCT_PACKAGES += \
+        android.hardware.radio@1.1 \
+        android.hardware.radio.deprecated@1.0 \
 	libsecril-client \
 	libxml2 \
 	libprotobuf-cpp-full \
