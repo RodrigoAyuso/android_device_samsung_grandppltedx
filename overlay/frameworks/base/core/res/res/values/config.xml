@@ -238,5 +238,4 @@
     <bool name="config_allowMediaUidForCameraServiceProxy">true</bool>
 
     <bool name="config_setColorTransformAccelerated">true</bool>
-
 </resources>
