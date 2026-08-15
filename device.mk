@@ -137,6 +137,7 @@ PRODUCT_PACKAGES += \
 	wpa_supplicant \
 	wpa_supplicant.conf \
 	lib_driver_cmd_mt66xx \
+	android.hardware.wifi@1.0-service.legacy \
 	wificond \
 	wifilogd
 
