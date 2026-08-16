@@ -34,6 +34,7 @@
 #include <utils/SystemClock.h>
 #include <inttypes.h>
 #include <cutils/properties.h>
+#include <cstring>
 
 #define ANDROID_ATOMIC_INLINE
 extern "C" {
@@ -8799,51 +8800,67 @@ int radio::oemHookRawInd(int slotId,
     return 0;
 }
 
-void radio::registerService(RIL_RadioFunctions *callbacks, CommandInfo *commands) {
+void radio::registerService(RIL_RadioFunctions *callbacks,
+                            CommandInfo *commands) {
     using namespace android::hardware;
-    int simCount = 1;
-    const char *serviceNames[] = {
-            android::RIL_getServiceName()
-            #if (SIM_COUNT >= 2)
-            , RIL2_SERVICE_NAME
-            #if (SIM_COUNT >= 3)
-            , RIL3_SERVICE_NAME
-            #if (SIM_COUNT >= 4)
-            , RIL4_SERVICE_NAME
-            #endif
-            #endif
-            #endif
-            };
+
+    const char *serviceName = android::RIL_getServiceName();
+    int slotId = 0;
 
     #if (SIM_COUNT >= 2)
-    simCount = SIM_COUNT;
+    if (!strcmp(serviceName, RIL2_SERVICE_NAME)) {
+        slotId = 1;
+    }
+    #if (SIM_COUNT >= 3)
+    else if (!strcmp(serviceName, RIL3_SERVICE_NAME)) {
+        slotId = 2;
+    }
+    #if (SIM_COUNT >= 4)
+    else if (!strcmp(serviceName, RIL4_SERVICE_NAME)) {
+        slotId = 3;
+    }
+    #endif
+    #endif
     #endif
 
     s_vendorFunctions = callbacks;
     s_commands = commands;
 
     configureRpcThreadpool(1, true /* callerWillJoin */);
-    for (int i = 0; i < simCount; i++) {
-        pthread_rwlock_t *radioServiceRwlockPtr = getRadioServiceRwlock(i);
-        int ret = pthread_rwlock_wrlock(radioServiceRwlockPtr);
-        assert(ret == 0);
 
-        radioService[i] = new RadioImpl;
-        radioService[i]->mSlotId = i;
-        RLOGD("registerService: starting android::hardware::radio::V1_1::IRadio %s",
-                serviceNames[i]);
-        android::status_t status = radioService[i]->registerAsService(serviceNames[i]);
+    pthread_rwlock_t *radioServiceRwlockPtr =
+    getRadioServiceRwlock(slotId);
 
-        if (kOemHookEnabled) {
-            oemHookService[i] = new OemHookImpl;
-            oemHookService[i]->mSlotId = i;
-            status = oemHookService[i]->registerAsService(serviceNames[i]);
-        }
+    int ret = pthread_rwlock_wrlock(radioServiceRwlockPtr);
+    assert(ret == 0);
 
-        ret = pthread_rwlock_unlock(radioServiceRwlockPtr);
-        assert(ret == 0);
+    radioService[slotId] = new RadioImpl;
+    radioService[slotId]->mSlotId = slotId;
+
+    RLOGD("registerService: starting "
+    "android::hardware::radio::V1_1::IRadio %s for slotId %d",
+    serviceName, slotId);
+
+    android::status_t status =
+    radioService[slotId]->registerAsService(serviceName);
+
+    RLOGD("registerService: IRadio %s status %d",
+          serviceName, status);
+
+    if (kOemHookEnabled) {
+        oemHookService[slotId] = new OemHookImpl;
+        oemHookService[slotId]->mSlotId = slotId;
+
+        status =
+        oemHookService[slotId]->registerAsService(serviceName);
+
+        RLOGD("registerService: IOemHook %s status %d",
+              serviceName, status);
     }
-}
+
+    ret = pthread_rwlock_unlock(radioServiceRwlockPtr);
+    assert(ret == 0);
+                            }
 
 void rilc_thread_pool() {
     joinRpcThreadpool();
@@ -8853,11 +8870,11 @@ pthread_rwlock_t * radio::getRadioServiceRwlock(int slotId) {
     pthread_rwlock_t *radioServiceRwlockPtr = &radioServiceRwlock;
 
     #if (SIM_COUNT >= 2)
-    if (slotId == 2) radioServiceRwlockPtr = &radioServiceRwlock2;
+    if (slotId == 1) radioServiceRwlockPtr = &radioServiceRwlock2;
     #if (SIM_COUNT >= 3)
-    if (slotId == 3) radioServiceRwlockPtr = &radioServiceRwlock3;
+    if (slotId == 2) radioServiceRwlockPtr = &radioServiceRwlock3;
     #if (SIM_COUNT >= 4)
-    if (slotId == 4) radioServiceRwlockPtr = &radioServiceRwlock4;
+    if (slotId == 3) radioServiceRwlockPtr = &radioServiceRwlock4;
     #endif
     #endif
     #endif
