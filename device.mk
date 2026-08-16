@@ -69,6 +69,9 @@ PRODUCT_PACKAGES += \
 	libtinyxml \
 	libfs_mgr
 
+# HIDL
+PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
+
 PRODUCT_PACKAGES += \
 	android.hardware.audio@4.0-impl \
 	android.hardware.audio@2.0-service \
