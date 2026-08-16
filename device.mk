@@ -176,8 +176,10 @@ PRODUCT_COPY_FILES += \
 
 # shim / symbols
 PRODUCT_PACKAGES += \
+	libshim_audio \
 	libshim_binder \
 	libshim_bionic \
+	libshim_unwindstack \
 	libshim_xlog \
 	libshim_gui \
 	libshim_region \
