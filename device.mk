@@ -301,10 +301,6 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/grandppltedx/configs/init,$(TARGET_COPY_OUT_VENDOR)/etc/init)
 
-# Storage
-PRODUCT_VENDOR_PROPERTIES += \
-    external_storage.sdcardfs.enabled=false
-
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \

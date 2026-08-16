@@ -162,7 +162,8 @@ TARGET_LD_SHIM_LIBS := \
     /system/vendor/lib/hw/gralloc.mt6735.so|libutilscallstack.so \
     /system/vendor/bin/nvram_agent_binder|/system/vendor/lib/libshim_binder.so \
     /system/vendor/bin/mtk_agpsd|/system/vendor/lib/libshim_ssl.so \
-    /system/vendor/lib/egl/libGLES_mali.so|/system/vendor/lib/libshim_region.so
+    /system/vendor/lib/egl/libGLES_mali.so|/system/vendor/lib/libshim_region.so \
+    /system/vendor/lib/hw/audio.primary.mt6737t.so|/system/vendor/lib/libshim_audio.so
 
 # Audio
 BOARD_USES_MTK_AUDIO := true
