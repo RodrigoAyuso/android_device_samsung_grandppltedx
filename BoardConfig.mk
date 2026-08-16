@@ -137,6 +137,14 @@ TARGET_NEEDS_NETD_DIRECT_CONNECT_RULE := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/fstab.mt6735
 
+# Legacy MTK/Samsung mount points
+BOARD_ROOT_EXTRA_FOLDERS += \
+    nvdata \
+    efs \
+    persist \
+    protect_f \
+    protect_s
+
 # Move symlinks here
 TARGET_LD_SHIM_LIBS := \
     /system/vendor/lib/hw/hwcomposer.mt6735.so|libshim_xlog.so \
