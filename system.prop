@@ -220,6 +220,9 @@ ro.opengles.version=196609
 # Emulated storage
 external_storage.sdcardfs.enabled=false
 
+# Display
+debug.hwui.use_buffer_age=false
+
 ro.lmk.use_psi=false
 ro.lmk.use_minfree_levels=true
 ro.config.per_app_memcg=false
