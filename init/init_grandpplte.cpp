@@ -1,79 +1,216 @@
 /*
-   Copyright (c) 2018, The Lineage Project. All rights reserved.
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are
-   met:
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-    * Neither the name of The Linux Foundation nor the names of its
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-   THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-   WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-   ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-   BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-   BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-   WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-   OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-   IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright (C) 2026 The LineageOS Project
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+
 #include <sys/_system_properties.h>
 
 #include <android-base/file.h>
 #include <android-base/logging.h>
-#include <android-base/strings.h>
 #include <android-base/properties.h>
+#include <android-base/strings.h>
 
-#include "property_service.h"
+#include <cstdio>
+#include <string>
+#include <unistd.h>
+#include <vector>
+
 #include "vendor_init.h"
-#include "log.h"
 
 #define SIMSLOT_FILE "/proc/simslot_count"
 
 using android::base::GetProperty;
 using android::base::ReadFileToString;
-using android::base::Trim;
-using android::init::property_set;
+using android::base::StartsWith;
 
-int read_integer(const char* filename) {
-	int retval;
-	FILE * file;
+static const std::vector<std::string> kProductPropSources = {
+  "",
+  "odm.",
+  "product.",
+  "system.",
+  "system_ext.",
+  "vendor.",
+};
 
-	/* open the file */
-	if (!(file = fopen(filename, "r"))) {
-		return -1;
-	}
-	/* read the value from the file */
-	fscanf(file, "%d", &retval);
-	fclose(file);
+static void property_override(const std::string& prop,
+                              const std::string& value) {
+  auto pi = const_cast<prop_info*>(
+    __system_property_find(prop.c_str()));
 
-	return retval;
-}
+  if (pi != nullptr) {
+    __system_property_update(pi, value.c_str(), value.size());
+  } else {
+    __system_property_add(
+      prop.c_str(), prop.size(),
+                          value.c_str(), value.size());
+  }
+                              }
 
-void vendor_load_properties() {
-	int sim_count = 0;
+                              static void set_ro_product_prop(const std::string& prop,
+                                                              const std::string& value) {
+                                for (const auto& source : kProductPropSources) {
+                                  property_override(
+                                    "ro.product." + source + prop,
+                                    value);
+                                }
+                                                              }
 
-	/* check if the simslot count file exists */
-	if (access(SIMSLOT_FILE, F_OK) == 0) {
-		sim_count = read_integer(SIMSLOT_FILE);
-	}
+                                                              static int read_integer(const char* filename) {
+                                                                int value;
+                                                                FILE* file = fopen(filename, "r");
 
-	/* check whether device is dual sim */
-	if (sim_count == 1) {
-		android::init::property_set("ro.multisim.simslotcount", "1");
-		android::init::property_set("persist.radio.multisim.config", "none");
-	} else {
-		android::init::property_set("ro.multisim.simslotcount", "2");
-		android::init::property_set("persist.radio.multisim.config", "dsds");
-	}
-	android::init::property_set("ro.multisim.set_audio_params", "true");
-}
+                                                                if (file == nullptr) {
+                                                                  return -1;
+                                                                }
+
+                                                                if (fscanf(file, "%d", &value) != 1) {
+                                                                  fclose(file);
+                                                                  return -1;
+                                                                }
+
+                                                                fclose(file);
+                                                                return value;
+                                                              }
+
+                                                              static std::string get_bootloader() {
+                                                                std::string bootloader =
+                                                                GetProperty("ro.bootloader", "");
+
+                                                                if (bootloader.empty()) {
+                                                                  bootloader =
+                                                                  GetProperty("ro.boot.bootloader", "");
+                                                                }
+
+                                                                return bootloader;
+                                                              }
+
+                                                              static std::string detect_model_from_string(
+                                                                const std::string& value) {
+                                                                /*
+                                                                 * G532MT must be checked before G532M because
+                                                                 * "G532MT" also starts with "G532M".
+                                                                 */
+                                                                if (value.find("G532MT") != std::string::npos) {
+                                                                  return "SM-G532MT";
+                                                                }
+
+                                                                if (value.find("G532M") != std::string::npos) {
+                                                                  return "SM-G532M";
+                                                                }
+
+                                                                if (value.find("G532F") != std::string::npos) {
+                                                                  return "SM-G532F";
+                                                                }
+
+                                                                if (value.find("G532G") != std::string::npos) {
+                                                                  return "SM-G532G";
+                                                                }
+
+                                                                return "";
+                                                                }
+
+                                                                static std::string detect_model() {
+                                                                  const std::string bootloader = get_bootloader();
+
+                                                                  std::string model =
+                                                                  detect_model_from_string(bootloader);
+
+                                                                  if (!model.empty()) {
+                                                                    LOG(INFO) << "grandpplte: detected "
+                                                                    << model
+                                                                    << " from bootloader "
+                                                                    << bootloader;
+
+                                                                    return model;
+                                                                  }
+
+                                                                  /*
+                                                                   * Some Samsung/MediaTek boot chains expose the exact
+                                                                   * product model in the "connie=" kernel command line.
+                                                                   */
+                                                                  std::string cmdline;
+
+                                                                  if (ReadFileToString("/proc/cmdline", &cmdline)) {
+                                                                    model = detect_model_from_string(cmdline);
+
+                                                                    if (!model.empty()) {
+                                                                      LOG(INFO) << "grandpplte: detected "
+                                                                      << model
+                                                                      << " from kernel cmdline";
+
+                                                                      return model;
+                                                                    }
+                                                                  }
+
+                                                                  return "";
+                                                                }
+
+                                                                static void set_device_model() {
+                                                                  const std::string model = detect_model();
+
+                                                                  if (model.empty()) {
+                                                                    LOG(WARNING)
+                                                                    << "grandpplte: unable to determine device model";
+                                                                    return;
+                                                                  }
+
+                                                                  set_ro_product_prop("model", model);
+
+                                                                  /*
+                                                                   * Useful for init scripts and debugging without having
+                                                                   * to re-parse the bootloader string.
+                                                                   */
+                                                                  property_override(
+                                                                    "ro.vendor.grandpplte.model",
+                                                                    model);
+
+                                                                  LOG(INFO) << "grandpplte: using model "
+                                                                  << model;
+                                                                }
+
+                                                                static void set_sim_properties() {
+                                                                  int sim_count = -1;
+
+                                                                  if (access(SIMSLOT_FILE, F_OK) == 0) {
+                                                                    sim_count = read_integer(SIMSLOT_FILE);
+                                                                  }
+
+                                                                  if (sim_count == 1) {
+                                                                    property_override(
+                                                                      "ro.multisim.simslotcount",
+                                                                      "1");
+
+                                                                    property_override(
+                                                                      "persist.radio.multisim.config",
+                                                                      "none");
+
+                                                                    LOG(INFO)
+                                                                    << "grandpplte: detected single-SIM variant";
+                                                                  } else if (sim_count >= 2) {
+                                                                    property_override(
+                                                                      "ro.multisim.simslotcount",
+                                                                      "2");
+
+                                                                    property_override(
+                                                                      "persist.radio.multisim.config",
+                                                                      "dsds");
+
+                                                                    LOG(INFO)
+                                                                    << "grandpplte: detected dual-SIM variant";
+                                                                  } else {
+                                                                    LOG(WARNING)
+                                                                    << "grandpplte: unable to determine SIM slot count";
+                                                                  }
+
+                                                                  property_override(
+                                                                    "ro.multisim.set_audio_params",
+                                                                    "true");
+                                                                }
+
+                                                                void vendor_load_properties() {
+                                                                  set_device_model();
+                                                                  set_sim_properties();
+                                                                }

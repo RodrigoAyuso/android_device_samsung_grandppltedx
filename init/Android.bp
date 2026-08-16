@@ -18,9 +18,16 @@
 cc_library_static {
     name: "libinit_grandpplte",
     recovery_available: true,
-    srcs: ["init_grandpplte.cpp"],
+
+    srcs: [
+        "init_grandpplte.cpp",
+    ],
+
     include_dirs: [
-        "system/core/base/include",
         "system/core/init",
-    ]
+    ],
+
+    shared_libs: [
+        "libbase",
+    ],
 }
