@@ -380,3 +380,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # App widgets
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.app_widgets.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.software.app_widgets.xml
+
+# Keylayouts
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/keylayout/sec_touchscreen.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/sec_touchscreen.kl \
+    $(DEVICE_PATH)/keylayout/gpio_keys.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/gpio_keys.kl \
+    $(DEVICE_PATH)/keylayout/mtk-kpd.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/mtk-kpd.kl \
+    $(DEVICE_PATH)/keylayout/dt2w_pwrkey.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/dt2w_pwrkey.kl

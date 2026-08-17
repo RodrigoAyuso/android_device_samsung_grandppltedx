@@ -1,0 +1,4 @@
+# Samsung GPIO keys
+
+key 115 VOLUME_UP
+key 172 HOME WAKE
