@@ -833,12 +833,12 @@ on boot
 ## Sensors permissions -- end ##
 
 on property:sys.boot_completed=1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
-    write /sys/devices/system/cpu/cpufreq/ondemand/boostpulse_duration 0
-    write /sys/devices/system/cpu/cpufreq/ondemand/go_hispeed_load 95
-    write /sys/devices/system/cpu/cpufreq/ondemand/hispeed_freq 1170000
-    write /sys/devices/system/cpu/cpufreq/ondemand/min_sample_time 20000
-    write /sys/devices/system/cpu/cpufreq/ondemand/target_loads  "70 819000:85 1040000:95 1300000:99"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration 0
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 95
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1170000
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 20000
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads  "70 819000:85 1040000:95 1300000:99"
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
