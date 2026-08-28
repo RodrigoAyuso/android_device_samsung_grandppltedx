@@ -78,8 +78,6 @@ telephony.lteOnGsmDevice=1
 telephony.lteOnCdmaDevice=0
 
 ## Samsung Specific Properties
-ro.build.PDA=G532GDXU1ASA5
-ro.build.hidden_ver=G532GDXU1ASA5
 ro.config.rm_preload_enabled=0
 ro.chipname=MT6737T
 
