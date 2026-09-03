@@ -11,6 +11,7 @@
  */
 #include "includes.h"
 #include <linux/wireless.h>
+#include <linux/sockios.h>
 #include "netlink/genl/genl.h"
 
 #include "common.h"
@@ -32,6 +33,66 @@
 ***********************************************************************/
 
 /**********************************************************************/
+/*
+ * grandppltedx: Android 8 suspend-mode private command bridge
+ *
+ * Android 8 sends SETSUSPENDMODE through driver_cmd. This legacy MTK
+ * shim did not forward it even though the gen2 kernel already exposes
+ * the Android private-command ioctl at SIOCDEVPRIVATE + 1.
+ *
+ * Keep this layout identical to priv_driver_cmd_t in gl_wext_priv.c.
+ */
+#define MTK_PRIV_CMD_SIZE 512
+
+typedef struct mtk_priv_driver_cmd_s {
+    char buf[MTK_PRIV_CMD_SIZE];
+    int used_len;
+    int total_len;
+} mtk_priv_driver_cmd_t;
+
+static int wpa_driver_mediatek_priv_cmd(struct i802_bss *bss, const char *cmd)
+{
+    struct wpa_driver_nl80211_data *drv;
+    struct ifreq ifr;
+    mtk_priv_driver_cmd_t priv_cmd;
+    size_t cmd_len;
+    int ret;
+
+    if (bss == NULL || cmd == NULL)
+        return -1;
+
+    drv = bss->drv;
+    if (drv == NULL || drv->global == NULL || drv->first_bss == NULL)
+        return -1;
+
+    cmd_len = os_strlen(cmd);
+    if (cmd_len == 0 || cmd_len >= sizeof(priv_cmd.buf)) {
+        wpa_printf(MSG_ERROR, "%s: invalid private command length %u",
+                   __func__, (unsigned int) cmd_len);
+        return -1;
+    }
+
+    os_memset(&priv_cmd, 0, sizeof(priv_cmd));
+    os_strlcpy(priv_cmd.buf, cmd, sizeof(priv_cmd.buf));
+    priv_cmd.used_len = 0;
+    priv_cmd.total_len = (int) cmd_len + 1;
+
+    os_memset(&ifr, 0, sizeof(ifr));
+    os_strlcpy(ifr.ifr_name, drv->first_bss->ifname, IFNAMSIZ);
+    ifr.ifr_data = (void *) &priv_cmd;
+
+    ret = ioctl(drv->global->ioctl_sock, SIOCDEVPRIVATE + 1, &ifr);
+    if (ret < 0) {
+        wpa_printf(MSG_ERROR, "%s: private ioctl failed for \"%s\"",
+                   __func__, cmd);
+        return -1;
+    }
+
+    wpa_printf(MSG_DEBUG, "%s: forwarded \"%s\" to MTK gen2",
+               __func__, cmd);
+    return 0;
+}
+
 static int wpa_driver_mediatek_set_country(void *priv, const char *alpha2_arg)
 {
     struct i802_bss *bss = priv;
@@ -212,6 +273,8 @@ int wpa_driver_nl80211_driver_cmd(void *priv, char *cmd, char *buf,
             // if (endp != cp)
                 // ret = wpa_driver_wext_driver_set_rts(drv, thd);
         }
+    } else if (os_strncasecmp(cmd, "SETSUSPENDMODE", 14) == 0) {
+        ret = wpa_driver_mediatek_priv_cmd(bss, cmd);
     } else if (os_strcasecmp(cmd, "btcoexscan-start") == 0) {
         ret = 0; /* mt5921 linux driver not implement yet */
     } else if (os_strcasecmp(cmd, "btcoexscan-stop") == 0) {
