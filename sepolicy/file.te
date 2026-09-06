@@ -66,6 +66,14 @@ type proc_mtkcooler, fs_type;
 type proc_mtktz, fs_type;
 type proc_slogger, fs_type;
 type proc_lk_env, fs_type;
+# LineageOS: MTK /proc/chip hardware-identification subtree.
+type proc_chip, fs_type;
+# LineageOS: nl80211 Wi-Fi data-frame filter sysctls.
+type proc_wifi_filter, fs_type;
+# LineageOS: MTK GED proc subtree (/proc/ged).
+type proc_ged, fs_type;
+# LineageOS: only the Wi-Fi anti-hole-196 sysctl files.
+type proc_wifi_drop_unicast, fs_type;
 type sysfs_vcorefs_pwrctrl, fs_type, sysfs_type;
 type sysfs_md32, fs_type, sysfs_type;
 type sysfs_scp, fs_type, sysfs_type;
@@ -85,6 +93,8 @@ type persist_data_file, file_type, data_file_type;
 type key_install_data_file, file_type, data_file_type;
 type nvram_data_file, file_type, data_file_type;
 type nvdata_file, file_type, data_file_type;
+# LineageOS: Samsung/MTK Wi-Fi persistent files under /efs/wifi.
+type wifi_efs_file, file_type;
 type mediaserver_data_file, file_type, data_file_type;
 
 # 20131213 KKMR1_CQ_CTS_02

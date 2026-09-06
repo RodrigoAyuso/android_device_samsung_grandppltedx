@@ -94,3 +94,5 @@ allow nvram_daemon rootfs:lnk_file { getattr };
 # O
 #allow nvram_daemon sysfs:file { write read open };
 
+# LineageOS: nvram_daemon publishes ro.wlan.mtk.wifi.5g during early boot.
+set_prop(nvram_daemon, wifi_5g_prop)

@@ -5,3 +5,10 @@
 allow hal_wifi_supplicant_default system_data_file:dir { remove_name setattr write };
 allow hal_wifi_supplicant_default system_data_file:file { getattr open read write };
 allow hal_wifi_supplicant_default system_data_file:sock_file { getattr open read unlink write };
+
+# LineageOS: anti-hole-196 protection for wlan0 only.
+allow hal_wifi_supplicant_default proc_wifi_drop_unicast:file rw_file_perms;
+
+# LineageOS: nl80211 writes only the specifically-labeled wlan0
+# data-frame filter sysctls. Do not grant generic proc_net write.
+allow hal_wifi_supplicant_default proc_wifi_filter:file write;

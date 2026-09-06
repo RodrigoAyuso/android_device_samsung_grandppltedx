@@ -38,3 +38,7 @@ allow thermal statusd:unix_stream_socket connectto;
 # Nougat
 allow thermal rootfs:lnk_file { getattr };
 
+# LineageOS: thermal is a dedicated /system executable type.
+# Early-boot processes only stat() this binary while scanning /system/bin.
+# Keep this metadata-only instead of granting read/execute.
+allow domain thermal_exec:file getattr;

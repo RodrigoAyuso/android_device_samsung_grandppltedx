@@ -33,3 +33,6 @@ allow mtk_6620_launcher system_file:dir { read open };
 allow mtk_6620_launcher rootfs:lnk_file { getattr };
 
 init_daemon_domain(mtk_6620_launcher)
+
+# LineageOS: 6620_launcher publishes persist.bluetooth_fw_ver.
+set_prop(mtk_6620_launcher, persist_bt_prop)

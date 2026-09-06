@@ -1,0 +1,10 @@
+# LineageOS grandppltedx: MTK fuel-gauge daemon (/system/bin/fuelgauged).
+#
+# This domain is intentionally minimal during Permissive bring-up.
+# Do not populate it with audit2allow output blindly; round-6 should add only
+# accesses observed from this real domain.
+
+type fuelgauged, domain;
+type fuelgauged_exec, exec_type, file_type;
+
+init_daemon_domain(fuelgauged)

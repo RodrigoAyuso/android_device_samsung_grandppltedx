@@ -59,4 +59,5 @@ allow kernel proc_thermal:dir search;
 allow kernel self:capability dac_override;
 allow kernel system_data_file:file { open write };
 allow kernel unlabeled:file { open read };
-allow kernel wifi_data_file:file write;
+# LineageOS: mtk_wmtd reads and updates /data/.wifiver.info.
+allow kernel wifi_data_file:file rw_file_perms;

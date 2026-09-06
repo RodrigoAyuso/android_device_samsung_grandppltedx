@@ -1,0 +1,10 @@
+# LineageOS grandppltedx: Samsung DR-daemon (/system/bin/ddexe).
+#
+# This domain is intentionally minimal during Permissive bring-up.
+# Do not populate it with audit2allow output blindly; round-6 should add only
+# accesses observed from this real domain.
+
+type ddexe, domain;
+type ddexe_exec, exec_type, file_type;
+
+init_daemon_domain(ddexe)

@@ -81,3 +81,11 @@ allow surfaceflinger proc:file { ioctl open read write };
 allow surfaceflinger device:chr_file { ioctl read write };
 allow surfaceflinger guiext-server_service:service_manager find;
 
+# LineageOS: SurfaceFlinger probes /proc/chip/hw_code metadata.
+allow surfaceflinger proc_chip:file getattr;
+
+# LineageOS: MTK GUI extension service exchanges BufferQueue information with SurfaceFlinger.
+binder_call(surfaceflinger, guiext-server)
+
+# Round-5: read MTK /proc/chip/hw_code only.
+allow surfaceflinger proc_chip:file { getattr open read };

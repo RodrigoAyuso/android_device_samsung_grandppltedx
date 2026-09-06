@@ -2,3 +2,5 @@
 
 allow hal_wifi_default wmtWifi_device:chr_file { open write };
 
+# LineageOS: Wi-Fi HAL reads ro.wlan.mtk.wifi.5g.
+get_prop(hal_wifi_default, wifi_5g_prop)

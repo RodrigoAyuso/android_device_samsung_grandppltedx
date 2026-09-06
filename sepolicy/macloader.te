@@ -25,3 +25,14 @@ allow macloader sysfs:file rw_file_perms;
 # /efs
 allow macloader efs_file:dir r_dir_perms;
 
+# LineageOS: macloader opens /dev/wmtWifi to power the MTK WLAN function.
+allow macloader wmtWifi_device:chr_file rw_file_perms;
+
+# LineageOS: observed network interface discovery by macloader.
+allow macloader self:capability { net_admin net_raw };
+
+# LineageOS: macloader opens an IPv4/UDP control socket.
+allow macloader self:udp_socket create_socket_perms;
+
+# LineageOS: read existing /data/.wifiver.info.
+allow macloader wifi_data_file:file r_file_perms;

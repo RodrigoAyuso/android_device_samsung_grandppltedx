@@ -35,6 +35,8 @@ media.wfd. u:object_r:media_wfd_prop:s0
 
 #=============allow netd to set mtk_wifi.*========================
 mtk_wifi. u:object_r:mtk_wifi_prop:s0
+# Exact read-only MTK Wi-Fi 5 GHz capability property.
+ro.wlan.mtk.wifi.5g u:object_r:wifi_5g_prop:s0
 
 #=============allow mdlogger==============
 debug.mdlogger u:object_r:debug_mdlogger_prop:s0
@@ -157,6 +159,7 @@ user.region                u:object_r:save_locale_prop:s0
 #=============allow bt prop==============
 bt.                         u:object_r:bt_prop:s0
 persist.bt.          u:object_r:persist_bt_prop:s0
+persist.bluetooth_fw_ver u:object_r:persist_bt_prop:s0
 #=============allow ccci_mdinit EVDO ==============
 mtk_telephony   u:object_r:mtk_tele_prop:s0
 #=============allow ccci_mdinit md status ==============

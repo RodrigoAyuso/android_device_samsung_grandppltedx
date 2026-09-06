@@ -1,0 +1,9 @@
+# Samsung/MTK GED exposes GPU coordination through /proc/ged.
+# Keep this separate from generic proc so app domains do not gain broad /proc access.
+allow appdomain proc_ged:dir { search getattr open read };
+allow appdomain proc_ged:file { getattr open read ioctl };
+
+# LineageOS: MTK GED consumers observed after proc_ged was correctly labeled.
+allow surfaceflinger proc_ged:file { getattr open read ioctl };
+allow bootanim proc_ged:file { getattr open read ioctl };
+allow system_server proc_ged:file { getattr open read ioctl };

@@ -130,3 +130,6 @@ allow init ttyMT_device:chr_file { ioctl write };
 allow init vendor_file:file execute_no_trans;
 allow init wmtdetect_device:chr_file { ioctl write };
 allow init stpwmt_device:chr_file { ioctl write };
+
+# LineageOS: init validates SELinux contexts during post-fs-data.
+selinux_check_context(init)

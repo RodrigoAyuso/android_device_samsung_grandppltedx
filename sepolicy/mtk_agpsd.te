@@ -46,3 +46,8 @@ allow mtk_agpsd rootfs:lnk_file { getattr };
 
 # Nougat
 allow mtk_agpsd tmpfs:dir { search };
+
+# LineageOS: /system/bin/mtk_agpsd has a dedicated exec type.
+# Generic system executables are stat-able by domains; preserve only that
+# metadata access without granting read/execute to the AGPS daemon binary.
+allow domain mtk_agpsd_exec:file getattr;

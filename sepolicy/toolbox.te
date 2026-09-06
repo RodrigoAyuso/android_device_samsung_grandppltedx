@@ -35,3 +35,20 @@ allow toolbox device:chr_file { create };
 
 # O
 allow toolbox cache_file:dir search;
+
+# LineageOS: init.mt6735.rc runs `toybox taskset -p f 1`.
+allow toolbox init:process { getsched setsched };
+
+# LineageOS: boot-time chmod follows /data/nvram -> /nvdata.
+allow toolbox nvram_data_file:lnk_file read;
+allow toolbox nvdata_file:dir search;
+allow toolbox nvdata_file:file { getattr setattr };
+
+# LineageOS: boot script copies /fstab.mt6735 into /nvdata.
+allow toolbox rootfs:file r_file_perms;
+
+# LineageOS: create/update the copied fstab in /nvdata.
+allow toolbox nvdata_file:dir { write add_name };
+
+# LineageOS: write /nvdata/fstab.mt6735.
+allow toolbox nvdata_file:file { create open write };

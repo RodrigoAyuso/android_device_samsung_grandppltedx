@@ -30,4 +30,13 @@ allow bluetooth program_binary_service:service_manager find;
 
 # 2017/7/22: daniel_hk(danielhk@github.com)
 # O
-allow bluetooth wmt_prop:file { getattr open };
+
+# LineageOS: read Bluetooth/MTK connectivity properties.
+get_prop(bluetooth, bt_prop)
+get_prop(bluetooth, wmt_prop)
+
+# LineageOS: read the device Bluetooth address from /efs/bluetooth.
+r_dir_file(bluetooth, bluetooth_efs_file)
+
+# LineageOS: Bluetooth reads persisted Samsung/MTK BT configuration.
+get_prop(bluetooth, persist_bt_prop)

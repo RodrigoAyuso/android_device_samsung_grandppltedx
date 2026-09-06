@@ -38,6 +38,7 @@
 /data/misc/xlog(/.*)? u:object_r:xlog_data_file:s0
 /data/misc/PDC.ini u:object_r:akmd8963_access_file2:s0
 /data/misc/ppp(/.*)? u:object_r:ppp_data_file:s0
+/data/misc/radio(/.*)? u:object_r:radio_data_file:s0
 /data/.tp(/.*)? u:object_r:thermal_manager_data_file:s0
 /data/misc/radvd(/.*)? u:object_r:radvd_data_file:s0
 /data/misc/sensor.log		u:object_r:bmm050_sensor_log_file:s0
@@ -46,9 +47,12 @@
 /data/misc/wide-dhcpv6(/.*)? u:object_r:wide_dhcpv6_data_file:s0
 /data/misc/wpa_supplicant(/.*)? u:object_r:wpa_supplicant_data_file:s0
 /data/nfc_socket(/.*)? u:object_r:nfc_socket:s0
+/data/\.wifiver\.info u:object_r:wifi_data_file:s0
 /data/nvram(/.*)? u:object_r:nvram_data_file:s0
 /data/md3(/.*)? u:object_r:c2k_file:s0
 /nvdata(/.*)? u:object_r:nvdata_file:s0
+/efs/wifi(/.*)? u:object_r:wifi_efs_file:s0
+/efs/bluetooth(/.*)? u:object_r:bluetooth_efs_file:s0
 /data/SF_dump(./*)? u:object_r:sf_bqdump_data_file:s0
 /data/ipsec(/.*)? u:object_r:wod_ipsec_conf_file:s0
 /data/ipsec/wo(/.*)? u:object_r:wod_apn_conf_file:s0
@@ -72,7 +76,7 @@
 /dev/android(/.*)? u:object_r:android_device:s0
 /dev/barometer(/.*)? u:object_r:barometer_device:s0
 /dev/humidity(/.*)? u:object_r:humidity_device:s0
-/dev/block/zram0(/.*)? u:object_r:zram0_device:s0
+/dev/block/zram0 u:object_r:swap_block_device:s0
 /dev/bmtpool(/.*)? u:object_r:bmtpool_device:s0
 /dev/bootimg(/.*)? u:object_r:bootimg_device:s0
 /dev/BOOT(/.*)? u:object_r:BOOT_device:s0
@@ -313,28 +317,28 @@
 /dev/shf  u:object_r:shf_device:s0
 
 # define raw block partition label
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/proinfo		u:object_r:nvram_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/nvram		u:object_r:nvram_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/nvdata		u:object_r:nvdata_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/frp		u:object_r:frp_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/expdb		u:object_r:expdb_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/misc2		u:object_r:misc2_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/logo		u:object_r:logo_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/para		u:object_r:para_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/tee1		u:object_r:tee_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/tee2		u:object_r:tee_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/seccfg		u:object_r:seccfg_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/secro		u:object_r:secro_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/userdata		u:object_r:userdata_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/cache		u:object_r:cache_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/recovery		u:object_r:recovery_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/protect1		u:object_r:protect1_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/protect2		u:object_r:protect2_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/keystore		u:object_r:keystore_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/oemkeystore	u:object_r:oemkeystore_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/boot	        u:object_r:boot_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/persist           u:object_r:persist_block_device:s0
-/dev/block/platform/mtk-msdc\.0/[0-9]+\.MSDC0/by-name/system            u:object_r:system_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/proinfo		u:object_r:nvram_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/nvram		u:object_r:nvram_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/nvdata		u:object_r:nvdata_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/frp		u:object_r:frp_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/expdb		u:object_r:expdb_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/misc2		u:object_r:misc2_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/logo		u:object_r:logo_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/para		u:object_r:para_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/tee1		u:object_r:tee_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/tee2		u:object_r:tee_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/seccfg		u:object_r:seccfg_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/secro		u:object_r:secro_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/userdata		u:object_r:userdata_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/cache		u:object_r:cache_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/recovery		u:object_r:recovery_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/protect1		u:object_r:protect1_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/protect2		u:object_r:protect2_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/keystore		u:object_r:keystore_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/oemkeystore	u:object_r:oemkeystore_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/boot	        u:object_r:boot_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/persist           u:object_r:persist_block_device:s0
+/dev/block/platform/mtk-msdc\.0/[0-9]+\.msdc0/by-name/system            u:object_r:system_block_device:s0
 
 #subtitle framework notify pixel data to Gallery apk  via /mnt/subt/xx.tmp file
 /mnt/subt(/.*)?  u:object_r:subtitle_data_file:s0
@@ -374,7 +378,9 @@
 #
 /system/app/mcRegistry(/.*)? u:object_r:mobicore_data_file:s0
 /vendor/bin/6620_launcher u:object_r:mtk_6620_launcher_exec:s0
+/system/bin/6620_launcher u:object_r:mtk_6620_launcher_exec:s0
 /vendor/bin/stp_dump3 u:object_r:stp_dump3_exec:s0
+/system/bin/stp_dump3 u:object_r:stp_dump3_exec:s0
 /system/bin/aal u:object_r:aal_exec:s0
 /system/bin/aee_core_forwarder u:object_r:aee_core_forwarder_exec:s0
 /vendor/bin/akmd09911 u:object_r:akmd09911_exec:s0
@@ -392,11 +398,14 @@
 /vendor/bin/boot_logo_updater u:object_r:boot_logo_updater_exec:s0
 /system/bin/br_app_data_service u:object_r:br_app_data_service_exec:s0
 /vendor/bin/ccci_fsd u:object_r:ccci_fsd_exec:s0
+/system/bin/ccci_fsd u:object_r:ccci_fsd_exec:s0
 /vendor/bin/ccci_mdinit u:object_r:ccci_mdinit_exec:s0
+/system/bin/ccci_mdinit u:object_r:ccci_mdinit_exec:s0
 /vendor/bin/ccci_rpcd u:object_r:ccci_rpcd_exec:s0
 /system/bin/custom_sn u:object_r:sn_exec:s0
 /vendor/bin/dhcp6c u:object_r:dhcp6c_exec:s0
 /vendor/bin/dm_agent_binder u:object_r:dm_agent_binder_exec:s0
+/system/bin/dm_agent_binder u:object_r:dm_agent_binder_exec:s0
 /system/bin/dmlog u:object_r:dmlog_exec:s0
 /system/bin/dongled u:object_r:usbdongled_exec:s0
 /system/bin/eemcs_fsd u:object_r:eemcs_fsd_exec:s0
@@ -412,6 +421,7 @@
 /system/bin/GoogleOtaBinder u:object_r:GoogleOtaBinder_exec:s0
 /system/bin/gsm0710muxd u:object_r:gsm0710muxd_exec:s0
 /vendor/bin/guiext-server u:object_r:guiext-server_exec:s0
+/system/bin/guiext-server u:object_r:guiext-server_exec:s0
 /system/bin/icusbd u:object_r:icusbd_exec:s0
 /system/bin/init.gprs-pppd u:object_r:zpppd_gprs_exec:s0
 /system/bin/ipod u:object_r:ipod_exec:s0
@@ -433,13 +443,17 @@
 /system/bin/mpud6050 u:object_r:mpud6050_exec:s0
 /system/bin/msensord u:object_r:msensord_exec:s0
 /vendor/bin/macloader u:object_r:macloader_exec:s0
+/system/bin/macloader u:object_r:macloader_exec:s0
 /system/bin/mtk_agpsd u:object_r:mtk_agpsd_exec:s0
 /system/bin/MtkCodecService u:object_r:MtkCodecService_exec:s0
 /system/bin/mtkrild u:object_r:mtkrild_exec:s0
 /system/bin/muxreport u:object_r:muxreport_exec:s0
 /vendor/bin/netdiag u:object_r:netdiag_exec:s0
+/system/bin/netdiag u:object_r:netdiag_exec:s0
 /vendor/bin/nvram_agent_binder u:object_r:nvram_agent_binder_exec:s0
+/system/bin/nvram_agent_binder u:object_r:nvram_agent_binder_exec:s0
 /vendor/bin/nvram_daemon u:object_r:nvram_daemon_exec:s0
+/system/bin/nvram_daemon u:object_r:nvram_daemon_exec:s0
 /system/bin/nvram_proximity u:object_r:nvram_daemon_exec:s0
 /vendor/bin/orientationd u:object_r:orientationd_exec:s0
 /system/bin/permission_check u:object_r:permission_check_exec:s0
@@ -448,6 +462,7 @@
 /system/bin/pppd_dt u:object_r:pppd_dt_exec:s0
 /system/bin/pppd_via u:object_r:pppd_via_exec:s0
 /vendor/bin/pq u:object_r:pq_exec:s0
+/system/bin/pq u:object_r:pq_exec:s0
 /system/bin/program_binary_service u:object_r:program_binary_exec:s0
 /system/bin/resize2fs  --  u:object_r:resize_exec:s0
 /system/bin/resize_ext4  --  u:object_r:resize_exec:s0
@@ -459,9 +474,11 @@
 /system/bin/statusd u:object_r:statusd_exec:s0
 /system/bin/terservice u:object_r:terservice_exec:s0
 /vendor/bin/thermald u:object_r:thermald_exec:s0
+/system/bin/thermald u:object_r:thermald_exec:s0
 /vendor/bin/thermal_manager u:object_r:thermal_manager_exec:s0
 /system/bin/thermalloadalgod u:object_r:thermalloadalgod_exec:s0  
 /vendor/bin/thermal u:object_r:thermal_exec:s0
+/system/bin/thermal u:object_r:thermal_exec:s0
 /system/bin/tiny_mkswap u:object_r:tiny_mkswap_exec:s0
 /system/bin/tiny_swapon u:object_r:tiny_swapon_exec:s0
 #/system/bin/tune2fs u:object_r:tune2fs_exec:s0
@@ -500,3 +517,6 @@
 
 #fat on nand image
 /fat(/.*)?  u:object_r:fon_image_data_file:s0
+/system/bin/ddexe u:object_r:ddexe_exec:s0
+/system/bin/smdexe u:object_r:smdexe_exec:s0
+/system/bin/fuelgauged u:object_r:fuelgauged_exec:s0

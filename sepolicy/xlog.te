@@ -31,3 +31,6 @@ allow xlog system_data_file:dir { relabelfrom create_dir_perms  };
 allow xlog xlog_data_file:dir { relabelto create_dir_perms   };
 allow xlog xlog_data_file:file { write create read open setattr };;
 allow xlog init:unix_stream_socket connectto;
+
+# LineageOS: read persisted MTK AEE properties.
+get_prop(xlog, persist_mtk_aee_prop)

@@ -5,9 +5,19 @@ genfscon proc /driver/thermal u:object_r:proc_thermal:s0
 genfscon proc /mtkcooler u:object_r:proc_mtkcooler:s0
 genfscon proc /mtktz u:object_r:proc_mtktz:s0
 genfscon proc /lk_env u:object_r:proc_lk_env:s0
+# LineageOS: MTK SoC identification.
+genfscon proc /chip u:object_r:proc_chip:s0
+# LineageOS: MTK GPU GED userspace interface.
+genfscon proc /ged u:object_r:proc_ged:s0
+# LineageOS: wpa_supplicant toggles only these wlan0 sysctls.
+genfscon proc /sys/net/ipv4/conf/wlan0/drop_unicast_in_l2_multicast u:object_r:proc_wifi_drop_unicast:s0
+genfscon proc /sys/net/ipv6/conf/wlan0/drop_unicast_in_l2_multicast u:object_r:proc_wifi_drop_unicast:s0
 genfscon proc /driver/storage_logger u:object_r:proc_slogger:s0
 genfscon proc /driver/icusb u:object_r:proc_icusb:s0
 
 genfscon iso9660 / u:object_r:iso9660:s0
 genfscon rawfs / u:object_r:rawfs:s0
 #genfscon fuseblk / u:object_r:fuseblk:s0
+
+# LineageOS: wpa_supplicant nl80211 data-frame filtering for wlan0.
+genfscon proc /sys/net/ipv6/conf/wlan0/drop_unsolicited_na u:object_r:proc_wifi_filter:s0

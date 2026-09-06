@@ -10,5 +10,11 @@ allow audioserver property_socket:sock_file { write };
 allow audioserver init:unix_stream_socket { connectto };
 
 allow audioserver nvram_data_file:lnk_file { read };
-allow audioserver nvdata_file:file { read };
+allow audioserver nvdata_file:dir search;
+allow audioserver nvdata_file:file r_file_perms;
 
+# LineageOS: MTK audio connects to RIL's abstract "Multiclient" socket.
+allow audioserver rild:unix_stream_socket connectto;
+
+# LineageOS: MTK audioserver updates audio HAL runtime properties.
+set_prop(audioserver, audiohal_prop)

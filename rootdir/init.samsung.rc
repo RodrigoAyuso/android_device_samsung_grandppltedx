@@ -125,6 +125,8 @@ on post-fs-data
     mkdir /data/misc/audit 0775 audit system 
     # hatp
     mkdir /data/misc/radio/hatp 0755 radio system
+    # LineageOS: relabel existing MTK RIL data as radio_data_file.
+    restorecon_recursive /data/misc/radio
 
     # Samsung Pay
     #mkdir /efs/pfw_data 0760 spay spay

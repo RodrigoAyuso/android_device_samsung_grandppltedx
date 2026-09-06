@@ -1,0 +1,13 @@
+# Samsung/MTK Wi-Fi calibration/MAC data under /efs/wifi.
+# Scope access to this type instead of opening generic efs_file.
+
+allow macloader wifi_efs_file:dir r_dir_perms;
+allow macloader wifi_efs_file:file r_file_perms;
+
+# The legacy MTK connectivity kernel thread reads .mac.info from kernel space.
+allow kernel wifi_efs_file:dir search;
+allow kernel wifi_efs_file:file r_file_perms;
+
+# LineageOS: macloader checks writability of /efs/wifi.
+# Keep file contents read-only here; only the observed directory write bit is added.
+allow macloader wifi_efs_file:dir write;

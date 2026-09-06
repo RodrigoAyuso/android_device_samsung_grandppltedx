@@ -18,8 +18,32 @@ allow rild logcat_exec:file { execute execute_no_trans getattr open read };
 allow rild logd:unix_stream_socket connectto;
 allow rild logdr_socket:sock_file write;
 allow rild self:capability { chown dac_read_search };
-allow rild system_data_file:dir { add_name write };
-allow rild system_data_file:file { append create setattr write };
+allow rild radio_data_file:dir { search write add_name };
+allow rild radio_data_file:file { create open read write append getattr setattr };
 allow rild unlabeled:dir search;
 allow rild unlabeled:file { getattr open read write };
 
+# LineageOS: read persisted RIL properties.
+get_prop(rild, persist_ril_prop)
+
+# LineageOS: MTK RIL locates audioserver through /proc/<pid>/cmdline
+# and updates the IPv6 accept_ra_defrtr network sysctl.
+allow rild audioserver:dir search;
+allow rild audioserver:file { open read };
+allow rild proc_net:file write;
+
+# LineageOS: Samsung RIL updates its persisted radio properties.
+set_prop(rild, persist_ril_prop)
+
+# LineageOS: remaining metadata access to /data/misc/radio.
+allow rild radio_data_file:dir getattr;
+
+# LineageOS: SQLite/opname.db locking and ioctl under radio_data_file.
+allow rild radio_data_file:file { ioctl lock };
+
+# LineageOS: RIL stats /proc/<audioserver>/cmdline before reading it.
+allow rild audioserver:file getattr;
+
+# LineageOS: cleanup of the observed /data/misc/radio/ahrh temporary file.
+allow rild radio_data_file:dir remove_name;
+allow rild radio_data_file:file unlink;
