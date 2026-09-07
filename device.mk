@@ -253,24 +253,17 @@ PRODUCT_COPY_FILES += \
 
 # GPS
 PRODUCT_PACKAGES += \
-        gps.mt6737t \
 	wifi2agps \
 	libepos \
-	libcurl
+	libcurl \
+	android.hardware.gnss@1.0-impl \
+        android.hardware.gnss@1.0-service \
+        libboringssl-compat
 	
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.hardware.location.gps.xml \
-	$(DEVICE_PATH)/configs/gps/agps_profiles_conf2.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/agps_profiles_conf2.xml
-
-$(call inherit-product, device/common/gps/gps_us_supl.mk)
-
-PRODUCT_PACKAGES += \
-    libboringssl-compat
-
-# GPS / GNSS HAL
-PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl \
-    android.hardware.gnss@1.0-service
+	$(DEVICE_PATH)/configs/gps/agps_profiles_conf2.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/agps_profiles_conf2.xml \
+        $(DEVICE_PATH)/configs/gps/gps.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/gps.conf
 
 # Camera
 PRODUCT_PACKAGES += \
