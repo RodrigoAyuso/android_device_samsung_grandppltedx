@@ -29,8 +29,6 @@ ro.mediatek.version.sdk=4
 rild.libpath=/system/lib/libsec-ril.so
 rild.libpath2=/system/lib/libsec-ril-dsds.so
 rild.libargs=-d /dev/ttyC0
-
-ro.telephony.ril.socket_name=rild,rild2
 ro.ril.telephony.mqanelements=6
 
 ## Dalvik / hwui
@@ -140,7 +138,6 @@ ro.mtk_perf_simple_start_win=1
 ro.mtk_perf_response_time=1
 
 persist.radio.sib16_support=0
-ro.telephony.default_network=9
 ro.product.first_api_level=23
 ro.carrier=unknown
 ro.com.google.clientidbase=android-samsung
@@ -151,7 +148,6 @@ ril.specific.sm_cause=0
 bgw.current3gband=0
 ril.external.md=0
 ro.sf.hwrotation=0
-ro.mediatek.gemini_support=true
 persist.radio.fd.counter=15
 persist.radio.fd.off.counter=5
 persist.radio.fd.r8.counter=15
@@ -167,9 +163,6 @@ ril.radiooff.poweroffMD=0
 ro.mediatek.version.branch=alps-mp-m1.mp8.tc10sp
 ro.mediatek.version.release=alps-mp-m1.mp8.tc10sp
 ro.mediatek.version.sdk=4
-ro.mtk_gemini_support=1
-persist.radio.gemini_support=1
-ril.current.share_modem=2
 ro.mtk_audenh_support=1
 ro.mtk_bt_support=1
 ro.mtk_wappush_support=1
@@ -218,7 +211,6 @@ persist.mtk.wcn.combo.chipid=-1
 service.wcn.driver.ready=no
 service.wcn.coredump.mode=0
 ro.com.android.mobiledata=true
-persist.radio.mobile.data=0,0
 persist.meta.dumpdata=0
 ro.opengles.version=196609
 

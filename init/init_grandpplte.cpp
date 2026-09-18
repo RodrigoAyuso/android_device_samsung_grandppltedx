@@ -158,21 +158,88 @@ static void property_override_dual(
 	}
 
 	/*
-	 * Configure dual-SIM properties.
+	 * Configure dual-SIM hardware.
 	 */
 	static void init_dual() {
-		property_set("ro.multisim.set_audio_params", "true");
-		property_set("ro.multisim.simslotcount", "2");
-		property_set("persist.radio.multisim.config", "dsds");
+		property_override(
+			"ro.multisim.set_audio_params",
+			"true"
+		);
+
+		property_override(
+			"ro.multisim.simslotcount",
+			"2"
+		);
+
+		property_override(
+			"ro.telephony.ril.socket_name",
+			"rild,rild2"
+		);
+
+		property_override(
+			"ro.mediatek.gemini_support",
+			"true"
+		);
+
+		property_override(
+			"ro.mtk_gemini_support",
+			"1"
+		);
+
+		property_set(
+			"persist.radio.multisim.config",
+			"dsds"
+		);
+
+		property_set(
+			"persist.radio.gemini_support",
+			"1"
+		);
+
+		property_set(
+			"ril.current.share_modem",
+			"2"
+		);
 	}
 
 	/*
-	 * Configure single-SIM properties.
+	 * Configure single-SIM hardware.
 	 */
 	static void init_single() {
-		property_set("ro.multisim.set_audio_params", "true");
-		property_set("ro.multisim.simslotcount", "1");
-		property_set("persist.radio.multisim.config", "none");
+		property_override(
+			"ro.multisim.set_audio_params",
+			"true"
+		);
+
+		property_override(
+			"ro.multisim.simslotcount",
+			"1"
+		);
+
+		property_override(
+			"ro.telephony.ril.socket_name",
+			"rild"
+		);
+
+		property_override(
+			"ro.mediatek.gemini_support",
+			"false"
+		);
+
+		property_override(
+			"ro.mtk_gemini_support",
+			"0"
+		);
+
+		property_set(
+			"persist.radio.multisim.config",
+			"none"
+		);
+
+		property_set(
+			"persist.radio.gemini_support",
+			"0"
+		);
 	}
 
 	/*
@@ -277,11 +344,6 @@ static void property_override_dual(
 				"ro.lineage.device.model",
 				lineage_model.c_str()
 			);
-
-			property_override(
-				"ro.lineage.device.sim_type",
-				dual_sim ? "dual" : "single"
-			);
 			}
 
 			void vendor_load_properties() {
@@ -315,13 +377,45 @@ static void property_override_dual(
 					sim_count = read_integer(SIMSLOT_FILE);
 				}
 
-				const bool dual_sim = (sim_count != 1);
+				bool dual_sim;
+
+				if (sim_count == 1) {
+					dual_sim = false;
+				} else if (sim_count == 2) {
+					dual_sim = true;
+				} else {
+					/*
+					 * Preserve the old tree behavior if /proc/simslot_count
+					 * cannot be read. It is safer to retain dual-SIM support
+					 * than accidentally disable SIM2 on dual-SIM hardware.
+					 */
+					dual_sim = true;
+
+					LOG(WARNING)
+					<< "grandpplte: unable to determine SIM slot count from "
+					<< SIMSLOT_FILE
+					<< " (value=" << sim_count
+					<< "), falling back to dual-SIM";
+				}
+
+				LOG(INFO)
+				<< "grandpplte: simslot_count=" << sim_count
+				<< ", SIM mode=" << (dual_sim ? "dual" : "single");
 
 				if (dual_sim) {
 					init_dual();
 				} else {
 					init_single();
 				}
+
+				/*
+				 * This property is also consumed by init.rilcommon.rc.
+				 * Set it independently from the regional model detection.
+				 */
+				property_override(
+					"ro.lineage.device.sim_type",
+					dual_sim ? "dual" : "single"
+				);
 
 				/*
 				 * Detect G532F/G532G/G532M/G532MT.

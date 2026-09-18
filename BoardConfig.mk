@@ -211,8 +211,7 @@ TARGET_USES_NON_TREBLE_CAMERA := true
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # SEAndroid
-SELINUX_IGNORE_NEVERALLOWS := true
-BOARD_SEPOLICY_DIRS := $(DEVICE_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 # Enable Minikin text layout engine (will be the default soon)
 USE_MINIKIN := true

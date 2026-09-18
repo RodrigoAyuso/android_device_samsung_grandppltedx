@@ -10,26 +10,94 @@ import /init.rilcarrier.rc
 import /init.rilchip.rc
 import /init.rilepdg.rc
 
-on boot
+
+# BEGIN LineageOS grandppltedx RIL ordering fix
+#
+# The secondary Samsung RIL must not be started by class_start main.
+# init.vendor.rilchip.rc marks ril-daemon1 disabled; start it explicitly
+# only after the primary RIL has really reached running state.
+#
+# Arm the delay only after init reports the delay service as running.
+# This avoids interpreting its previous "stopped" state as a completed
+# timer during a primary-RIL restart.
+#
+service ril-daemon1-delay /system/bin/toybox sleep 1
+    class core
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:toolbox:s0
+
+on early-init
+    setprop sys.ril.daemon1_delay 0
+
+on property:init.svc.ril-daemon=stopping && property:ro.lineage.device.sim_type=dual
+    setprop sys.ril.daemon1_delay 0
+    stop ril-daemon1-delay
+    stop ril-daemon1
+
+on property:init.svc.ril-daemon=stopped && property:ro.lineage.device.sim_type=dual
+    setprop sys.ril.daemon1_delay 0
+    stop ril-daemon1-delay
+    stop ril-daemon1
+
+on property:init.svc.ril-daemon=restarting && property:ro.lineage.device.sim_type=dual
+    setprop sys.ril.daemon1_delay 0
+    stop ril-daemon1-delay
+    stop ril-daemon1
+
+on property:init.svc.ril-daemon=running && property:ro.lineage.device.sim_type=dual
+    setprop sys.ril.daemon1_delay 0
+    stop ril-daemon1-delay
+    stop ril-daemon1
+    start ril-daemon1-delay
+
+# Arm only after the delay service actually entered RUNNING.
+on property:init.svc.ril-daemon1-delay=running && property:init.svc.ril-daemon=running && property:ro.lineage.device.sim_type=dual
+    setprop sys.ril.daemon1_delay 1
+
+on property:init.svc.ril-daemon1-delay=stopped && property:sys.ril.daemon1_delay=1 && property:init.svc.ril-daemon=running && property:ro.lineage.device.sim_type=dual
+    setprop sys.ril.daemon1_delay 0
+    start ril-daemon1
+
+on property:ro.lineage.device.sim_type=single
+    setprop sys.ril.daemon1_delay 0
+    stop ril-daemon1-delay
+    stop ril-daemon1
+
+on property:init.svc.ril-daemon1=running && property:ro.lineage.device.sim_type=single
+    stop ril-daemon1
+# END LineageOS grandppltedx RIL ordering fix
 
 # AT Distributor for factory test
+#
 service DR-daemon /system/bin/ddexe
     class main
     user root
     group system radio inet net_raw
 
-# for ethernet
+#
+# Ethernet
+#
 service dhcpcd_eth0 /system/bin/dhcpcd -ABKL
     class main
     disabled
     oneshot
 
-# for SmartSwitch
+#
+# SmartSwitch
+#
 service dhcpcd_usb0 /system/bin/dhcpcd -ABKL
     class main
     disabled
     oneshot
-    
-# for Wi-Fi only models
+
+#
+# Wi-Fi only / no-radio models
+#
 on property:ro.radio.noril=yes
-stop ril-daemon
+    setprop sys.ril.daemon1_delay 0
+    stop ril-daemon1-delay
+    stop ril-daemon1
+    stop ril-daemon

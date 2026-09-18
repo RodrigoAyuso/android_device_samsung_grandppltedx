@@ -10,6 +10,7 @@ service ril-daemon /vendor/bin/hw/rild -l ${rild.libpath}
 
 service ril-daemon1 /vendor/bin/hw/rild -c 2 -l ${rild.libpath2}
     class main
+    disabled
     user radio
     group radio cache inet misc audio log system readproc wakelock oem_5432 net_admin net_raw
 
@@ -27,10 +28,3 @@ on post-fs-data
     symlink /data/user_de/0/com.android.providers.telephony/shared_prefs /data/data/com.android.providers.telephony/shared_prefs
     restorecon /data/data/com.android.providers.telephony/databases
     restorecon /data/data/com.android.providers.telephony/shared_prefs
-
-on property:sys.boot_completed=1
-    # restart RIL <--> modem stack to account for new locations
-    restart ril-daemon1
-
-on property:init.svc.ril-daemon1=restarting
-    restart ril-daemon
