@@ -13,7 +13,7 @@ allow rild gsm0710muxd_prop:file { read open getattr };
 allow rild ril_mux_report_case_prop:file { read open getattr };
 
 # O
-allow rild device:chr_file { ioctl open read write };
+
 allow rild logcat_exec:file { execute execute_no_trans getattr open read };
 allow rild logd:unix_stream_socket connectto;
 allow rild logdr_socket:sock_file write;
@@ -47,3 +47,7 @@ allow rild audioserver:file getattr;
 # LineageOS: cleanup of the observed /data/misc/radio/ahrh temporary file.
 allow rild radio_data_file:dir remove_name;
 allow rild radio_data_file:file unlink;
+
+# Samsung/MTK UMTS modem nodes
+allow rild umts_device:chr_file rw_file_perms;
+allow rild radio_data_file:lnk_file read;

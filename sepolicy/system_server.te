@@ -274,11 +274,19 @@ allow system_server wmt_prop:file { read open getattr };
 allow system_server wifi_data_file:sock_file { unlink };
 
 # Nougat
-allow system_server dalvikcache_data_file:file execute;
+
 
 # O
-allow system_server block_device:blk_file { getattr ioctl open read write };
-allow system_server device:chr_file { open read };
+
+
 allow system_server init:unix_dgram_socket sendto;
 allow system_server protect_s_data_file:dir { getattr read };
 
+
+# MTK GPS EPO data
+allow system_server mnld_data_file:file {
+    getattr
+    open
+    read
+    lock
+};

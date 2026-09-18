@@ -30,7 +30,7 @@ allow kernel nvram_device:blk_file { open read write };
 allow kernel nvdata_file:dir search;
 allow kernel nvdata_file:file r_file_perms;
 allow kernel wifi_data_file:dir search;
-#allow kernel self:capability { dac_read_search dac_override };
+#
 
 # Date : WK15.33
 # Operation : Migration
@@ -56,8 +56,8 @@ allow kernel proc_thermal:dir search;
 
 # HoangLong
 # O
-allow kernel self:capability dac_override;
-allow kernel system_data_file:file { open write };
+
+
 allow kernel unlabeled:file { open read };
 # LineageOS: mtk_wmtd reads and updates /data/.wifiver.info.
 allow kernel wifi_data_file:file rw_file_perms;

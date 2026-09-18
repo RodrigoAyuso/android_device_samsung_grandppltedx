@@ -280,3 +280,6 @@ allow platform_app md_monitor:unix_stream_socket connectto;
 # Purpose : subtitle feature need to w/r /mnt/subt/.
 allow platform_app subtitle_data_file:dir { open read write search create add_name};
 allow platform_app subtitle_data_file:file { open read write create};
+
+# SystemUI queries metadata for Settings device-protected data
+allow platform_app system_app_data_file:dir getattr;

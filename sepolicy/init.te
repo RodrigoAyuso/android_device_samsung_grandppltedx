@@ -89,10 +89,10 @@ allow init rawfs:file getattr;
 # for nvram_proximity
 allow init als_ps_device:chr_file ioctl;
 allow init nvram_device:blk_file write;
-#allow init system_file:file { execute_no_trans relabelfrom };
+#
 
 # for fm
-allow init device:chr_file { create ioctl open read write };
+
 allow init debugfs:dir mounton;
 allow init property_socket:sock_file write;
 
@@ -106,28 +106,26 @@ allow init agps_device:chr_file { ioctl write };
 allow init agpsd_data_file:sock_file write;
 allow init ccci_device:chr_file { read open ioctl write };
 allow init ccci_monitor_device:chr_file ioctl;
-allow init default_android_service:service_manager add;
-allow init dm_agent_binder_service:service_manager add;
-allow init guiext-server_service:service_manager add;
+
+
 allow init hostapd_exec:file getattr;
-allow init hostapd_exec:file relabelfrom;
+
 allow init logmisc_data_file:file append;
 allow init logtemp_data_file:file append;
-allow init mediacodec_exec:file relabelfrom;
-allow init nvram_agent_service:service_manager add;
-allow init pq_service:service_manager add;
+
+
 allow init rootfs:lnk_file setattr;
 allow init self:netlink_socket { bind create getattr read setopt write };
 allow init self:udp_socket write;
 allow init self:capability sys_module;
-allow init shell_exec:file execute_no_trans;
+
 allow init socket_device:sock_file write;
 allow init system_data_file:sock_file write;
-allow init system_file:dir { relabelfrom setattr };
-allow init system_file:file execute_no_trans;
+
+
 allow init ttyGS_device:chr_file { ioctl write };
 allow init ttyMT_device:chr_file { ioctl write };
-allow init vendor_file:file execute_no_trans;
+
 allow init wmtdetect_device:chr_file { ioctl write };
 allow init stpwmt_device:chr_file { ioctl write };
 

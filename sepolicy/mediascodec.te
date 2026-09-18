@@ -7,3 +7,5 @@ allow mediacodec sysfs:file { read write open };
 allow mediacodec proc_meminfo:file { read open getattr };
 allow mediacodec rootfs:lnk_file { getattr };
 
+# MTK SoC identification
+allow mediacodec proc_chip:file r_file_perms;

@@ -231,3 +231,4 @@ type md_monitor_data_file, file_type, data_file_type;
 #subtitle framework notify pixel data to Gallery apk  via /mnt/subt/xx.tmp file
 type subtitle_data_file, file_type,data_file_type;
 
+type ddexe_socket_file, file_type, data_file_type;

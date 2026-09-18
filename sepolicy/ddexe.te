@@ -8,3 +8,15 @@ type ddexe, domain;
 type ddexe_exec, exec_type, file_type;
 
 init_daemon_domain(ddexe)
+
+# Label /data/.socket_stream created by ddexe
+type_transition ddexe system_data_file:sock_file ddexe_socket_file ".socket_stream";
+
+# Create the control socket directly under /data
+allow ddexe system_data_file:dir {
+    search
+    write
+    add_name
+};
+
+allow ddexe ddexe_socket_file:sock_file create_file_perms;

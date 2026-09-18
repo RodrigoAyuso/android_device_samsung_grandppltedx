@@ -441,6 +441,6 @@ allow mediaserver proc:file { read open ioctl };
 allow mediaserver sysfs:file { read open };
 
 # O
-allow mediaserver block_device:blk_file { open read write };
+
 allow mediaserver proc:file write;
 

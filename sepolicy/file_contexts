@@ -520,3 +520,8 @@
 /system/bin/ddexe u:object_r:ddexe_exec:s0
 /system/bin/smdexe u:object_r:smdexe_exec:s0
 /system/bin/fuelgauged u:object_r:fuelgauged_exec:s0
+/dev/mtkgps    u:object_r:mnld_device:s0
+/dev/umts_boot[0-9]+    u:object_r:umts_device:s0
+/dev/umts_ipc[0-9]+     u:object_r:umts_device:s0
+/dev/umts_router        u:object_r:umts_device:s0
+/data/\.socket_stream    u:object_r:ddexe_socket_file:s0

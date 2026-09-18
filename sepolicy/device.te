@@ -190,3 +190,4 @@ type teei_config_device, dev_type;
 type teei_vfs_device, dev_type;
 type teei_rpmb_device, dev_type;
 type tfa9897_device, dev_type;
+type umts_device, dev_type;

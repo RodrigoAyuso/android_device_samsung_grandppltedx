@@ -1,0 +1,2 @@
+# Legacy GNSS library probes UDP socket and falls back normally.
+dontaudit hal_gnss_default self:udp_socket create;
